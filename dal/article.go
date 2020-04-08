@@ -1,6 +1,8 @@
 package dal
 
-import "time"
+import (
+	"time"
+)
 
 type Article struct {
 	ID        string    `json:"id"gorm:"varchar(255);not null;unique_index;primary"`
@@ -23,7 +25,7 @@ func (d *DAL) CreateNewArticle(article Article) (*Article, error) {
 
 func (d *DAL) GetArticleById(articleID string) (*Article, error) {
 	article := Article{}
-	err := d.DB.Where("id = ?", articleID).Take(&article).Preloads(&User{}).Error
+	err := d.DB.Preload("User").Where("id = ?", articleID).Take(&article).Error
 	if err != nil {
 		return nil, err
 	}
