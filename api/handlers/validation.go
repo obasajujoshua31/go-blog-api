@@ -32,4 +32,3 @@ func isEmailAndPasswordValid(user dal.User, validationError []error) []error {
 func isLoginValid(user dal.User) []error {
 	return isEmailAndPasswordValid(user, []error{})
 }
-

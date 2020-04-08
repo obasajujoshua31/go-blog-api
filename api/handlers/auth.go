@@ -27,7 +27,7 @@ const (
 	emailAlreadExist         = "email already exist"
 	unableToCreateUser       = "unable to create user"
 	unableToGenerateJWT      = "unable to generate jwt token"
-	loginCredentialsError =   "invalid login credentials"
+	loginCredentialsError    = "invalid login credentials"
 )
 
 type Handler struct {
@@ -78,13 +78,13 @@ func (h *Handler) Login() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		user, dao, failed := initializeAuthHandler(r, w, h, isLoginValid)
-        if failed {
-        	return
+		if failed {
+			return
 		}
 		defer dao.DB.Close()
 
 		foundUser, err := dao.GetUserByEmail(user.Email)
-		if err != nil || foundUser == nil{
+		if err != nil || foundUser == nil {
 			if gorm.IsRecordNotFoundError(err) {
 				http.Error(w, loginCredentialsError, http.StatusBadRequest)
 				return
@@ -129,8 +129,6 @@ func initializeAuthHandler(r *http.Request, w http.ResponseWriter, h *Handler, i
 	return &user, dao, false
 }
 
-
-
 func unMarshalRequest(r *http.Request, out interface{}) error {
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -166,7 +164,6 @@ func writeResponse(w http.ResponseWriter, data interface{}) {
 
 	w.Write(resp)
 }
-
 
 func generateTokenAndRespond(user *dal.User, w http.ResponseWriter) {
 	userToken, err := services.GenerateJWT(user.ID)
