@@ -29,6 +29,7 @@ func getConnString(appConfig *config.AppConfig) string {
 }
 
 func (d *DB) CreateTables(in interface{}) error {
+	d.DropTableIfExists(in)
 	if err := d.Debug().AutoMigrate(in).Error; err != nil {
 		return err
 	}

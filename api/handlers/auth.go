@@ -64,7 +64,7 @@ func (h *Handler) RegisterUser() http.HandlerFunc {
 
 		user.ID = services.GenerateUUID()
 
-		createdUser, err := dao.CreateNewRecord(*user)
+		createdUser, err := dao.CreateNewUser(*user)
 		if err != nil {
 			http.Error(w, unableToCreateUser, http.StatusInternalServerError)
 			return
@@ -119,13 +119,10 @@ func initializeAuthHandler(r *http.Request, w http.ResponseWriter, h *Handler, i
 		return nil, nil, true
 	}
 
-	db, err := services.NewDB(h.AppConfig)
-	if err != nil {
-		http.Error(w, unableToConnectToDB, http.StatusInternalServerError)
+	dao, failed := GetDAOFromDB(h, w)
+	if failed {
 		return nil, nil, true
 	}
-
-	dao := dal.NewDAL(db)
 	return &user, dao, false
 }
 

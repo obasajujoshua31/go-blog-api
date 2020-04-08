@@ -26,7 +26,19 @@ func NewAPI(config *config.AppConfig) *API {
 }
 
 func (a *API) initialize() {
-	a.r.HandleFunc("/", a.h.GetHome())
-	a.r.HandleFunc("/register", a.h.RegisterUser()).Methods(http.MethodPost)
-	a.r.HandleFunc("/login", a.h.Login()).Methods(http.MethodPost)
+	//unauthenticated routes
+	publicRoutes := a.r
+
+	publicRoutes.HandleFunc("/", a.h.GetHome())
+	publicRoutes.HandleFunc("/register", a.h.RegisterUser()).Methods(http.MethodPost)
+	publicRoutes.HandleFunc("/login", a.h.Login()).Methods(http.MethodPost)
+
+	//Authenticated routes
+	a.authRoutes("/articles", a.h.CreateArticle(), http.MethodPost)
+	a.authRoutes("/article/{id}", a.h.GetOneArticle(), http.MethodGet)
+
+}
+
+func (a *API) authRoutes(path string, handler http.HandlerFunc, method string) {
+	a.r.HandleFunc(path, AuthMiddleware(handler)).Methods(method)
 }
