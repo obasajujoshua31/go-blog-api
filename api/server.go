@@ -28,6 +28,15 @@ func Start() error {
 	//	return err
 	//}
 	//
+	//err = db.CreateTables(dal.Comment{})
+	//if err != nil {
+	//	return err
+	//}
+	//
+	//err = db.CreateTables(dal.Like{})
+	//if err != nil {
+	//	return err
+	//}
 	//defer db.Close()
 
 	log.Printf("Server started at %s...", appConfig.AppHost)

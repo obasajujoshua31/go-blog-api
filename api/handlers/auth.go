@@ -175,3 +175,4 @@ func generateTokenAndRespond(user *dal.User, w http.ResponseWriter) {
 
 	writeResponse(w, userResp)
 }
+

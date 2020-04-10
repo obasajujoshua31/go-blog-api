@@ -48,3 +48,11 @@ func isCreateArticleRequestValid(article dal.Article) (valErrors []error) {
 func isValidGUID(guid string) bool {
 	return guidRegex.MatchString(guid)
 }
+
+func isCreateCommentValid(comment dal.Comment) (valErrors []error) {
+	if comment.Content == "" {
+		valErrors = append(valErrors, errors.New("comment content cannot be empty"))
+	}
+
+	return valErrors
+}
